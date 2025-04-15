@@ -33,6 +33,9 @@ public class LoginPage {
     @FindBy (xpath = "//input[@id='login-button']")
     WebElement loginButton;
 
+    @FindBy (xpath = "//h3[@data-test='error']")
+    WebElement errorMessageLogin;
+
     public LoginPage(WebDriver driver){
         actions = new Actions(driver);
         PageFactory.initElements(driver, this);
@@ -56,6 +59,10 @@ public class LoginPage {
                 .click(inputPassword).sendKeys(password)
                 .pause(Duration.ofSeconds(1))
                 .click(loginButton).build().perform();
+    }
+
+    public String getErrorMessage(){
+        return errorMessageLogin.getText();
     }
 
 }

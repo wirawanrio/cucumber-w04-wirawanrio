@@ -14,11 +14,18 @@ Version 1.0
 
 import com.juaracoding.cucumber.utils.Browser;
 import com.juaracoding.cucumber.utils.DriverSingleton;
+import com.juaracoding.cucumber.utils.ScreenshotUtils;
 import com.relevantcodes.extentreports.ExtentReports;
 import com.relevantcodes.extentreports.ExtentTest;
+import com.relevantcodes.extentreports.LogStatus;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import static com.juaracoding.cucumber.utils.DateUtil.*;
 
 public class Hooks {
 
@@ -28,8 +35,11 @@ public class Hooks {
     @Before
     public void setup(Scenario scenario){
         DriverSingleton.setDriver(Browser.CHROME);
+        String dateFolder = getTodayDateFolder();
+
         if (reports == null) {
-            reports = new ExtentReports("target/extent-report.html");
+            String reportPath = "target/reports/" + dateFolder + "/extent-report.html";
+            reports = new ExtentReports(reportPath);
         }
         extentTest = reports.startTest(scenario.getName());
     }
@@ -37,9 +47,11 @@ public class Hooks {
     @After
     public void endScenarioTest(Scenario scenario){
         if (scenario.isFailed()) {
-            extentTest.log(com.relevantcodes.extentreports.LogStatus.FAIL, "Scenario Failed: " + scenario.getName());
+            String screenshotPath = ScreenshotUtils.captureScreenshot(DriverSingleton.getDriver(), scenario.getName());
+            extentTest.log(LogStatus.FAIL, "Scenario Failed: " + scenario.getName());
+            extentTest.log(LogStatus.FAIL, extentTest.addScreenCapture(screenshotPath));
         } else {
-            extentTest.log(com.relevantcodes.extentreports.LogStatus.PASS, "Scenario Passed: " + scenario.getName());
+            extentTest.log(LogStatus.PASS, "Scenario Passed: " + scenario.getName());
         }
         reports.endTest(extentTest);
         reports.flush();
