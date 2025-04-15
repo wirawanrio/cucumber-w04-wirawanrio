@@ -22,8 +22,6 @@ import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import static com.juaracoding.cucumber.utils.DateUtil.*;
 
