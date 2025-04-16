@@ -1,4 +1,4 @@
-package com.juaracoding.cucumber.stepdefinitions;
+package com.juaracoding.cucumber.pages;
 
 
 /*
@@ -64,6 +64,10 @@ public class InventoryPage {
 
     public void navigateToCart(){
         cart.click();
+    }
+
+    public void addSauceLabBackpack(){
+        buttonAddToCartSauceLabsBackpack.click();
     }
 
 

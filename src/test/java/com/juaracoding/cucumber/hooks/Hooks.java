@@ -46,10 +46,12 @@ public class Hooks {
     public void endScenarioTest(Scenario scenario){
         if (scenario.isFailed()) {
             String screenshotPath = ScreenshotUtils.captureScreenshot(DriverSingleton.getDriver(), scenario.getName());
-            extentTest.log(LogStatus.FAIL, "Scenario Failed: " + scenario.getName());
+            extentTest.log(LogStatus.FAIL, "Scenario Failed : " + scenario.getName());
             extentTest.log(LogStatus.FAIL, extentTest.addScreenCapture(screenshotPath));
         } else {
-            extentTest.log(LogStatus.PASS, "Scenario Passed: " + scenario.getName());
+            String screenshotPath = ScreenshotUtils.captureScreenshot(DriverSingleton.getDriver(), scenario.getName());
+            extentTest.log(LogStatus.PASS, "Scenario Passed : " + scenario.getName());
+            extentTest.log(LogStatus.PASS, extentTest.addScreenCapture(screenshotPath));
         }
         reports.endTest(extentTest);
         reports.flush();

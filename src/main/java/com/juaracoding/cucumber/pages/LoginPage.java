@@ -1,4 +1,4 @@
-package com.juaracoding.cucumber.stepdefinitions;
+package com.juaracoding.cucumber.pages;
 
 
 /*
