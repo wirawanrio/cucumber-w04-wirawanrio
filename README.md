@@ -66,9 +66,7 @@ Setelah test selesai, laporan hasil eksekusi dan screenshot test dapat ditemukan
 
 ## ✨ Future Improvements
 
-- Menambahkan **ExtentReports** untuk laporan lebih interaktif.
 - Integrasi dengan **CI/CD pipelines** seperti Jenkins atau GitHub Actions.
-- Support untuk multiple browsers (Chrome, Firefox, Edge).
 
 ## 🤝 Contributing
 
