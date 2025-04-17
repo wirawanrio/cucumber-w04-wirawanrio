@@ -60,7 +60,7 @@ src
 ## 📄 Reports
 
 Setelah test selesai, laporan hasil eksekusi dan screenshot test dapat ditemukan di:
-/target/cucumber-reports/
+/target/reports/
 
 
 ## ✨ Future Improvements
