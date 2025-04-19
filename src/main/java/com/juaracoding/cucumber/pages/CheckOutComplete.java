@@ -44,4 +44,8 @@ public class CheckOutComplete {
         backToHome.click();
     }
 
+    public WebElement getElementSuccessOrder(){
+        return successOrder;
+    }
+
 }

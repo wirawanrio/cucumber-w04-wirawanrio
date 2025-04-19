@@ -35,6 +35,7 @@ public class Hooks {
         DriverSingleton.setDriver(Browser.CHROME);
         String dateFolder = getTodayDateFolder();
 
+
         if (reports == null) {
             String reportPath = "target/reports/" + dateFolder + "/extent-report.html";
             reports = new ExtentReports(reportPath);

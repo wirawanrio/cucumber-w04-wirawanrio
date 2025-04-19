@@ -81,5 +81,9 @@ public class CheckoutInformation {
                 .build().perform();
     }
 
+    public WebElement getElemetInputFirstName(){
+        return inputFirstName;
+    }
+
 
 }

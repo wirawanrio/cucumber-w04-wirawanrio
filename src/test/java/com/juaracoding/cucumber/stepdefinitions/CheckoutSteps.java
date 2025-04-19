@@ -13,12 +13,15 @@ Version 1.0
 
 import com.juaracoding.cucumber.pages.*;
 import com.juaracoding.cucumber.utils.DriverSingleton;
+import com.juaracoding.cucumber.utils.WaitUtils;
 import com.relevantcodes.extentreports.LogStatus;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
+
+import java.time.Duration;
 
 import static com.juaracoding.cucumber.hooks.Hooks.extentTest;
 
@@ -40,6 +43,8 @@ public class CheckoutSteps {
         this.checkoutInformation = new CheckoutInformation(driver);
         this.checkoutOverview = new CheckoutOverview(driver);
         this.checkOutComplete = new CheckOutComplete(driver);
+
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 
     }
 
@@ -88,6 +93,7 @@ public class CheckoutSteps {
 
     @When("I fill valid personal information")
     public void i_fill_valid_personal_information(){
+        WaitUtils.waitForVisibility(driver, checkoutInformation.getElemetInputFirstName(), 5);
         checkoutInformation.fillFirstName("Rio");
         checkoutInformation.fillLastName("Renaldi");
         checkoutInformation.fillPostalCode("123456");
@@ -125,6 +131,7 @@ public class CheckoutSteps {
 
     @Then("I should see the confirmation message Thank you for your order!")
     public void i_should_see_the_confirmation_message_thank_you_for_your_order(){
+        WaitUtils.isElementPresent(driver,checkOutComplete.getElementSuccessOrder(),5);
         Assert.assertEquals(checkOutComplete.getMessageSuccess(), "Thank you for your order!");
         extentTest.log(LogStatus.PASS, "I should see the confirmation message Thank you for your order!");
     }
