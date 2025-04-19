@@ -29,6 +29,7 @@ public class Hooks {
 
     public static ExtentReports reports;
     public static ExtentTest extentTest;
+    public static Scenario scenario;
 
     @Before
     public void setup(Scenario scenario){
@@ -40,6 +41,7 @@ public class Hooks {
             String reportPath = "target/reports/" + dateFolder + "/extent-report.html";
             reports = new ExtentReports(reportPath);
         }
+        Hooks.scenario = scenario;
         extentTest = reports.startTest(scenario.getName());
     }
 

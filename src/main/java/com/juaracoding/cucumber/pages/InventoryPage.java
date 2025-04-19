@@ -70,6 +70,10 @@ public class InventoryPage {
         buttonAddToCartSauceLabsBackpack.click();
     }
 
+    public WebElement getElementSauceLabsBackpack(){
+        return buttonAddToCartSauceLabsBackpack;
+    }
+
 
 
 }

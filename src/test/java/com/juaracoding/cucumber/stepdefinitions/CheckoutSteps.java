@@ -11,33 +11,46 @@ Created on 4/16/2025 2:01 PM
 Version 1.0
 */
 
+
+import com.juaracoding.cucumber.hooks.Hooks;
 import com.juaracoding.cucumber.pages.*;
-import com.juaracoding.cucumber.utils.DriverSingleton;
-import com.juaracoding.cucumber.utils.WaitUtils;
+import com.juaracoding.cucumber.utils.*;
 import com.relevantcodes.extentreports.LogStatus;
+import io.cucumber.java.Scenario;
 import io.cucumber.java.en.And;
+import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.WebDriver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 
 import java.time.Duration;
+import java.util.List;
+import java.util.Map;
 
 import static com.juaracoding.cucumber.hooks.Hooks.extentTest;
 
 public class CheckoutSteps {
 
+    private static final Logger log = LoggerFactory.getLogger(CheckoutSteps.class);
     private WebDriver driver;
+    private LoginPage loginPage;
     private InventoryPage inventoryPage;
     private CartPage cartPage;
     private CheckoutInformation checkoutInformation;
     private CheckoutOverview checkoutOverview;
     private CheckOutComplete checkOutComplete;
+    private static List<Map<String, String>> checkoutData;
+    private int indexData = 0; // untuk iterasi per data Excel
+
 
 
     public CheckoutSteps(){
         this.driver = DriverSingleton.getDriver();
 
+        this.loginPage = new LoginPage(driver);
         this.inventoryPage = new InventoryPage(driver);
         this.cartPage = new CartPage(driver);
         this.checkoutInformation = new CheckoutInformation(driver);
@@ -51,6 +64,7 @@ public class CheckoutSteps {
     // TCC.HR.002
     @When("I add product to cart")
     public void i_add_product_to_cart(){
+        WaitUtils.waitForElementToBeClickable(driver, inventoryPage.getElementSauceLabsBackpack(), 10);
         inventoryPage.addSauceLabBackpack();
         extentTest.log(LogStatus.PASS, "I add product to cart");
     }
@@ -102,6 +116,7 @@ public class CheckoutSteps {
 
     @And("I click the continue button")
     public void i_click_the_continue_button(){
+        WaitUtils.waitForElementToBeClickable(driver, checkoutInformation.getElemetButtonContinue(), 5);
         checkoutInformation.clickContinue();
         extentTest.log(LogStatus.PASS, "I click the continue button");
     }
@@ -134,6 +149,50 @@ public class CheckoutSteps {
         WaitUtils.isElementPresent(driver,checkOutComplete.getElementSuccessOrder(),5);
         Assert.assertEquals(checkOutComplete.getMessageSuccess(), "Thank you for your order!");
         extentTest.log(LogStatus.PASS, "I should see the confirmation message Thank you for your order!");
+    }
+
+    @Given("I load checkout data")
+    public void load_checkout_data() {
+        ExcelReaderPro.loadExcel("src/main/resources/data/checkoutData.xlsx");
+        checkoutData = ExcelReaderPro.getAllData("Sheet1");
+        extentTest.log(LogStatus.PASS, "I load checkout data");
+    }
+
+    @When("I login using data from excel")
+    public void login_using_excel_data() {
+        String username = checkoutData.get(indexData).get("username");
+        String password = checkoutData.get(indexData).get("password");
+
+        driver.get(Constants.URL);
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+
+        loginPage.fillUsername(username);
+        loginPage.fillPassword(password);
+        loginPage.clickLoginButton();
+        extentTest.log(LogStatus.PASS, "I login using data from excel");
+    }
+
+    @When("I fill personal information from excel")
+    public void fill_personal_info_from_excel() {
+        String firstName = checkoutData.get(indexData).get("firstName");
+        String lastName = checkoutData.get(indexData).get("lastName");
+        String postalCode = checkoutData.get(indexData).get("postalCode");
+
+        WaitUtils.waitForVisibility(driver, checkoutInformation.getElemetInputFirstName(), 5);
+        checkoutInformation.fillFirstName(firstName);
+        checkoutInformation.fillLastName(lastName);
+        checkoutInformation.fillPostalCode(postalCode);
+
+        extentTest.log(LogStatus.PASS, "I fill personal information from excel");
+        String screenshotPath = ScreenshotUtils.captureScreenshot(DriverSingleton.getDriver(), "fill personal information from excel");
+        extentTest.log(LogStatus.PASS, extentTest.addScreenCapture(screenshotPath));
+
+    }
+
+    @And("I use checkout data from row {int}")
+    public void use_checkout_data_from_row(int rowNum) {
+        indexData = rowNum - 1; // Karena Excel mulai dari row 1 (user lihat), List Java dari 0
+        extentTest.log(LogStatus.PASS, "Use checkout data from row: " + rowNum);
     }
 
 

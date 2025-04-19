@@ -85,5 +85,9 @@ public class CheckoutInformation {
         return inputFirstName;
     }
 
+    public WebElement getElemetButtonContinue(){
+        return continueButton;
+    }
+
 
 }
